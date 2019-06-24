@@ -3,7 +3,7 @@
 #include "SpawnVolume.h"
 #include "BatteryCollector4_18.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Classes/Components/BoxComponent.h"
+#include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Pickup1.h"
 #include "Classes/Engine/World.h"
 
@@ -18,16 +18,15 @@ ASpawnVolume::ASpawnVolume()
 	RootComponent = WhereToSpawn;
 
 	//Set the spawn delay range
-	SpawnDelayRangeLow = 1.0f;
-	SpawnDelayRangeHigh = 4.5f;
+	SpawnDelayRangeLow = 0.2f;
+	SpawnDelayRangeHigh = 1.0f;
 }
 
 // Called when the game starts or when spawned
 void ASpawnVolume::BeginPlay()
 {
 	Super::BeginPlay();
-	SpawnDelay = FMath::FRandRange(SpawnDelayRangeLow, SpawnDelayRangeHigh);
-	GetWorldTimerManager().SetTimer(SpawnTimer, this, &ASpawnVolume::SpawnPickup, SpawnDelay, false);
+
 }
 
 // Called every frame
@@ -45,6 +44,21 @@ FVector ASpawnVolume::GetRandomPointInVolume()
 	return UKismetMathLibrary::RandomPointInBoundingBox(SpawnOrigin, SpawnExtent);
 
 }
+
+void ASpawnVolume::SetSpawningActive(bool bShouldSpawn)
+{
+	if (bShouldSpawn)
+	{
+		SpawnDelay = FMath::FRandRange(SpawnDelayRangeLow, SpawnDelayRangeHigh);
+		GetWorldTimerManager().SetTimer(SpawnTimer, this, &ASpawnVolume::SpawnPickup, SpawnDelay, false);
+	}
+	else
+	{
+		GetWorldTimerManager().ClearTimer(SpawnTimer);
+
+	}
+}
+
 
 void ASpawnVolume::SpawnPickup()
 {

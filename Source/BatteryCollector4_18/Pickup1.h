@@ -22,7 +22,7 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	FORCEINLINE class UStaticMeshComponent* GetMesh() const { return PickupMesh; }
 

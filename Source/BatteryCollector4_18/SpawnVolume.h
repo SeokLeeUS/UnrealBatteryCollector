@@ -16,22 +16,25 @@ public:
 	// Sets default values for this actor's properties
 	ASpawnVolume();
 
-protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
 	/**returns to where to spawn subobject*/
 	FORCEINLINE class UBoxComponent* GetWhereToSpawn() const { return WhereToSpawn; }
 	/**Find a random point within the BoxComponent */
 	UFUNCTION(BlueprintPure, Category = "Spawning")
 	FVector GetRandomPointInVolume();
 
+	/**this function toggles whether or not the spawn volume spawns pickups*/
+	UFUNCTION(BlueprintCallable, Category = "Spawning")
+	void SetSpawningActive(bool bShouldSpawn);
+
 protected:
 	/** The pickup to spawn*/
-	UPROPERTY(editAnywhere,Category = "Spawning")
+	UPROPERTY(EditAnywhere,Category = "Spawning")
 	TSubclassOf<class APickup1> WhatToSpawn;
 
 	FTimerHandle SpawnTimer;
